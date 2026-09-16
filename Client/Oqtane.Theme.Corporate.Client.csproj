@@ -1,8 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
 
   <PropertyGroup>
-    <TargetFramework>net9.0</TargetFramework>
-    <Version>6.1.2</Version>
+    <TargetFramework>net10.0</TargetFramework>
+    <Version>10.2.6</Version>
     <Authors>Oqtane Labs Inc</Authors>
     <Company>Oqtane Labs Inc</Company>
     <Description>Corporate Theme for Oqtane</Description>
@@ -12,14 +12,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-	  <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="9.0.4" />
-	  <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Authentication" Version="9.0.4" />
-	  <PackageReference Include="Microsoft.Extensions.Localization" Version="9.0.4" />
+	  <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="10.0.12" />
+	  <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Authentication" Version="10.0.12" />
+	  <PackageReference Include="Microsoft.Extensions.Localization" Version="10.0.12" />
   </ItemGroup>
 
   <ItemGroup>
-	  <PackageReference Include="Oqtane.Client" Version="6.1.2" />
-	  <PackageReference Include="Oqtane.Shared" Version="6.1.2" />
+	  <PackageReference Include="Oqtane.Client" Version="10.2.6" />
+	  <PackageReference Include="Oqtane.Shared" Version="10.2.6" />
   </ItemGroup>
 
   <PropertyGroup>

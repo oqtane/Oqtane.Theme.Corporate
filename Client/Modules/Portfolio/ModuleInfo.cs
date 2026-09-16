@@ -9,7 +9,7 @@ namespace Oqtane.Module.Corporate.Portfolio
         {
             Name = "Corporate Theme - Portfolio",
             Description = "Add a Portfolio section to your Corporate Theme",
-            Version = "6.1.2",
+            Version = "10.2.6",
             PackageName = "Oqtane.Theme.Corporate"
         };
     }

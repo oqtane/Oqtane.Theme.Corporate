@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
     <id>Oqtane.Theme.Corporate</id>
-    <version>6.1.2</version>
+    <version>10.2.6</version>
     <authors>Oqtane Labs Inc</authors>
     <owners>Oqtane Labs Inc</owners>
     <title>Corporate Theme</title>
@@ -15,14 +15,17 @@
     <tags>oqtane theme</tags>
     <releaseNotes></releaseNotes>
     <summary></summary>
-    <dependencies>
-      <dependency id="Oqtane.Framework" version="6.1.2" />
-    </dependencies>
+    <packageTypes>
+      <packageType name="Dependency" />
+      <packageType name="Oqtane.Framework" version="10.2.6" />
+    </packageTypes>
   </metadata>
   <files>
-    <file src="..\Client\bin\Release\net9.0\Oqtane.Theme.Corporate.Client.Oqtane.dll" target="lib\net9.0" /> 
-    <file src="..\Client\bin\Release\net9.0\Oqtane.Theme.Corporate.Client.Oqtane.pdb" target="lib\net9.0" /> 
-    <file src="..\Client\wwwroot\**\*.*" target="wwwroot" /> 
+    <file src="..\Client\bin\Release\net10.0\Oqtane.Theme.Corporate.Client.Oqtane.dll" target="lib\net10.0" />
+    <file src="..\Client\bin\Release\net10.0\Oqtane.Theme.Corporate.Client.Oqtane.pdb" target="lib\net10.0" />
+    <file src="..\Server\bin\Release\net10.0\Oqtane.Theme.Corporate.Server.Oqtane.dll" target="lib\net10.0" />
+    <file src="..\Server\bin\Release\net10.0\Oqtane.Theme.Corporate.Server.Oqtane.pdb" target="lib\net10.0" />
+    <file src="..\Server\wwwroot\**\*.*" target="wwwroot" /> 
     <file src="icon.png" target="" />
   </files>
 </package>

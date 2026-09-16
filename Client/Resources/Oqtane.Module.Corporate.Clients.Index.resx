@@ -832,8 +832,8 @@
   <data name="Countdown.Content" xml:space="preserve">
     <value>&lt;!-- Countdown Section --&gt;
 &lt;section id="countdown" class="countdown"&gt;
-  &lt;h2&gt;Christmas Day 2025&lt;/h2&gt;
-  &lt;div id="countdown-enddate" class="enddate"&gt;Dec 25, 2025 00:00&lt;/div&gt;
+  &lt;h2&gt;Christmas Day 2030&lt;/h2&gt;
+  &lt;div id="countdown-enddate" class="enddate"&gt;Dec 25, 2030 00:00&lt;/div&gt;
   &lt;div class="container countdown" data-aos="fade-up"&gt;
     &lt;div class="interval"&gt;
       &lt;span id="countdown-days" class="timer"&gt;&lt;/span&gt;

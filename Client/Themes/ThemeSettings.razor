@@ -1,7 +1,9 @@
 @namespace Oqtane.Theme.Corporate
+@using Oqtane.Theme.Corporate.Services
 @inherits ModuleBase
 @implements Oqtane.Interfaces.ISettingsControl
 @inject ISettingService SettingService
+@inject ICorporateThemeService CorporateThemeService
 @inject IStringLocalizer<Default> Localizer
 @attribute [OqtaneIgnore]
 
@@ -25,7 +27,7 @@
         </div>
     </div>
     <div class="row mb-1 align-items-center">
-        <Label Class="col-sm-3" For="_navbutton" HelpText="Specify if you wish to include a button in the navigation for this site">Nav Button?</Label>
+        <Label Class="col-sm-3" For="_navbutton" HelpText="Specify if you wish to include a call-to-action button in the navigation for this site">Navigation Button?</Label>
         <div class="col-sm-9">
             <select id="navbutton" class="form-select" @bind="@_navbutton">
                 <option value="True">Yes</option>
@@ -39,43 +41,279 @@
         </div>
     </div>
     <div class="row mb-1 align-items-center">
-        <Label Class="col-sm-3" For="_footerHTML" HelpText="Specify if you wish to include a footer section for this site">Footer Section?</Label>
-        <div class="col-sm-9">
-            <select id="footerHTML" class="form-select" value="@_footer" @onchange="(e => FooterChanged(e))">
-                <option value="True">Yes</option>
-                <option value="False">No</option>
-            </select>
-            @if (_footer == "True")
-            {
-                <textarea id="footerHTML" class="form-control" @bind="@_footerHTML" rows="5"></textarea>
-            }
-        </div>
-    </div>
-    <hr />
-    <div class="row mb-1 align-items-center">
-        <Label Class="col-sm-3" For="heroHTML" HelpText="Specify if you wish to include a hero banner for this page">Hero Banner?</Label>
-        <div class="col-sm-9">
-            <select id="heroHTML" class="form-select" value="@_hero" @onchange="(e => HeroChanged(e))">
-                <option value="True">Yes</option>
-                <option value="False">No</option>
-            </select>
-            @if (_hero == "True")
-            {
-                <textarea id="_heroHTML" class="form-control" @bind="@_heroHTML" rows="5"></textarea>
-            }
-        </div>
-    </div>
-    <br />
-    <div class="row mb-1 align-items-center">
-        <Label Class="col-sm-3" For="layout" HelpText="Specify the default layout for the page content">Content Layout:</Label>
+        <Label Class="col-sm-3" For="layout" HelpText="Specify if the modules on this page should include padding around the content">Padding?</Label>
         <div class="col-sm-9">
             <select id="layout" class="form-select" @bind="@_layout">
-                <option value="standard">Standard Width</option>
-                <option value="full">Full Width</option>
+                <option value="standard">Included</option>
+                <option value="full">None</option>
             </select>
         </div>
     </div>
 </div>
+<Section Name="Hero" Heading="Hero Banner" ResourceKey="Hero" Expanded="False">
+    <div class="container">
+        <div class="row mb-1 align-items-center">
+            <Label Class="col-sm-3" For="heroHTML" HelpText="Specify if you wish to include a hero banner for this page">Include Banner?</Label>
+            <div class="col-sm-9">
+                <select id="heroHTML" class="form-select" value="@_hero" @onchange="(e => HeroChanged(e))">
+                    <option value="True">Yes</option>
+                    <option value="False">No</option>
+                </select>
+                @if (_hero == "True")
+                {
+                    <textarea id="_heroHTML" class="form-control" @bind="@_heroHTML" rows="5"></textarea>
+                }
+            </div>
+        </div>
+    </div>
+</Section>
+<Section Name="Footer" Heading="Footer Section" ResourceKey="Footer" Expanded="False">
+    <div class="container">
+        <div class="row mb-1 align-items-center">
+            <Label Class="col-sm-3" For="_footerHTML" HelpText="Specify if you wish to include a footer section for this site">Include Footer?</Label>
+            <div class="col-sm-9">
+                <select id="footerHTML" class="form-select" value="@_footer" @onchange="(e => FooterChanged(e))">
+                    <option value="True">Yes</option>
+                    <option value="False">No</option>
+                </select>
+                @if (_footer == "True")
+                {
+                    <textarea id="footerHTML" class="form-control" @bind="@_footerHTML" rows="5"></textarea>
+                }
+            </div>
+        </div>
+    </div>
+</Section>
+<Section Name="MainColors" Heading="Main Colors" ResourceKey="Colors" Expanded="False">
+    <div class="container">
+        <div class="row mb-1 align-items-center">
+            <Label Class="col-sm-3" For="background-color" HelpText="Optionally specify a background color for the entire website, including individual sections">Background Color:</Label>
+            <div class="col-sm-9">
+                <div class="input-group">
+                    <input id="background-color" class="form-control" @bind="@_backgroundColor" />
+                    <button type="button" class="btn btn-secondary" @onclick="@StateHasChanged">Show</button>
+                    <div style="background-color: @_backgroundColor; width: 50px">&nbsp;</div>
+                </div>
+            </div>
+        </div>
+        <div class="row mb-1 align-items-center">
+            <Label Class="col-sm-3" For="default-color" HelpText="Optionally specify a default color used for the majority of the text content across the entire website">Default Color:</Label>
+            <div class="col-sm-9">
+                <div class="input-group">
+                    <input id="default-color" class="form-control" placeholder="#000000" @bind="@_defaultColor" />
+                    <button type="button" class="btn btn-secondary" @onclick="@StateHasChanged">Show</button>
+                    <div style="background-color: @_defaultColor; width: 50px">&nbsp;</div>
+                </div>
+            </div>
+        </div>
+        <div class="row mb-1 align-items-center">
+            <Label Class="col-sm-3" For="heading-color" HelpText="Optionally specify a color for headings, subheadings and title throughout the website">Heading Color:</Label>
+            <div class="col-sm-9">
+                <div class="input-group">
+                    <input id="heading-color" class="form-control" placeholder="#000000" @bind="@_headingColor" />
+                    <button type="button" class="btn btn-secondary" @onclick="@StateHasChanged">Show</button>
+                    <div style="background-color: @_headingColor; width: 50px">&nbsp;</div>
+                </div>
+            </div>
+        </div>
+        <div class="row mb-1 align-items-center">
+            <Label Class="col-sm-3" For="accent-color" HelpText="Optionally specify an color that represents your brand on the website. It's used for buttons, links, and other elements that need to stand out">Accent Color:</Label>
+            <div class="col-sm-9">
+                <div class="input-group">
+                    <input id="accent-color" class="form-control" placeholder="#000000" @bind="@_accentColor" />
+                    <button type="button" class="btn btn-secondary" @onclick="@StateHasChanged">Show</button>
+                    <div style="background-color: @_accentColor; width: 50px">&nbsp;</div>
+                </div>
+            </div>
+        </div>
+        <div class="row mb-1 align-items-center">
+            <Label Class="col-sm-3" For="surface-color" HelpText="Optionally specify a surface color is used as a background of boxed elements within sections, such as cards, icon boxes, or other elements that require a visual separation from the global background">Surface Color:</Label>
+            <div class="col-sm-9">
+                <div class="input-group">
+                    <input id="surface-color" class="form-control" placeholder="#000000" @bind="@_surfaceColor" />
+                    <button type="button" class="btn btn-secondary" @onclick="@StateHasChanged">Show</button>
+                    <div style="background-color: @_surfaceColor; width: 50px">&nbsp;</div>
+                </div>
+            </div>
+        </div>
+        <div class="row mb-1 align-items-center">
+            <Label Class="col-sm-3" For="contrast-color" HelpText="Optionally specify a contrast color for text, ensuring readability against backgrounds of accent, heading, or default colors">Contrast Color:</Label>
+            <div class="col-sm-9">
+                <div class="input-group">
+                    <input id="contrast-color" class="form-control" placeholder="#000000" @bind="@_contrastColor" />
+                    <button type="button" class="btn btn-secondary" @onclick="@StateHasChanged">Show</button>
+                    <div style="background-color: @_contrastColor; width: 50px">&nbsp;</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</Section>
+<Section Name="HeaderColors" Heading="Header Colors" ResourceKey="HeaderColors" Expanded="False">
+    <div class="container">
+        <div class="row mb-1 align-items-center">
+            <Label Class="col-sm-3" For="header-background-color" HelpText="Optionally specify a color for the site header">Background Color:</Label>
+            <div class="col-sm-9">
+                <div class="input-group">
+                    <input id="header-background-color" class="form-control" placeholder="#000000" @bind="@_headerBackgroundColor" />
+                    <button type="button" class="btn btn-secondary" @onclick="@StateHasChanged">Show</button>
+                    <div style="background-color: @_headerBackgroundColor; width: 50px">&nbsp;</div>
+                </div>
+            </div>
+        </div>
+        <div class="row mb-1 align-items-center">
+            <Label Class="col-sm-3" For="header-heading-color" HelpText="Optionally specify a color for the header heading color">Heading Color:</Label>
+            <div class="col-sm-9">
+                <div class="input-group">
+                    <input id="header-heading-color" class="form-control" placeholder="#000000" @bind="@_headerHeadingColor" />
+                    <button type="button" class="btn btn-secondary" @onclick="@StateHasChanged">Show</button>
+                    <div style="background-color: @_headerHeadingColor; width: 50px">&nbsp;</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</Section>
+<Section Name="NavigationColors" Heading="Navigation Colors" ResourceKey="NavigationColors" Expanded="False">
+    <div class="container">
+        <div class="row mb-1 align-items-center">
+            <Label Class="col-sm-3" For="nav-color" HelpText="Optionally specify a default color of the main navmenu links">Link Color:</Label>
+            <div class="col-sm-9">
+                <div class="input-group">
+                    <input id="nav-color" class="form-control" placeholder="#000000" @bind="@_navColor" />
+                    <button type="button" class="btn btn-secondary" @onclick="@StateHasChanged">Show</button>
+                    <div style="background-color: @_navColor; width: 50px">&nbsp;</div>
+                </div>
+            </div>
+        </div>
+        <div class="row mb-1 align-items-center">
+            <Label Class="col-sm-3" For="nav-hover-color" HelpText="Optionally specify a color for the main navmenu links when they are hovered over or active">Hover Color:</Label>
+            <div class="col-sm-9">
+                <div class="input-group">
+                    <input id="nav-hover-color" class="form-control" placeholder="#000000" @bind="@_navHoverColor" />
+                    <button type="button" class="btn btn-secondary" @onclick="@StateHasChanged">Show</button>
+                    <div style="background-color: @_navHoverColor; width: 50px">&nbsp;</div>
+                </div>
+            </div>
+        </div>
+        <div class="row mb-1 align-items-center">
+            <Label Class="col-sm-3" For="nav-mobile-background-color" HelpText="Optionally specify a background color for mobile navigation menu">Mobile Background Color:</Label>
+            <div class="col-sm-9">
+                <div class="input-group">
+                    <input id="nav-mobile-background-color" class="form-control" placeholder="#000000" @bind="@_navMobileBackgroundColor" />
+                    <button type="button" class="btn btn-secondary" @onclick="@StateHasChanged">Show</button>
+                    <div style="background-color: @_navMobileBackgroundColor; width: 50px">&nbsp;</div>
+                </div>
+            </div>
+        </div>
+        <div class="row mb-1 align-items-center">
+            <Label Class="col-sm-3" For="nav-dropdown-background-color" HelpText="Optionally specify a background color for dropdown items that appear when hovering over primary navigation items">Dropdown Background Color:</Label>
+            <div class="col-sm-9">
+                <div class="input-group">
+                    <input id="nav-dropdown-background-color" class="form-control" placeholder="#000000" @bind="@_navDropdownBackgroundColor" />
+                    <button type="button" class="btn btn-secondary" @onclick="@StateHasChanged">Show</button>
+                    <div style="background-color: @_navDropdownBackgroundColor; width: 50px">&nbsp;</div>
+                </div>
+            </div>
+        </div>
+        <div class="row mb-1 align-items-center">
+            <Label Class="col-sm-3" For="nav-dropdown-color" HelpText="Optionally specify a color for navigation links of the dropdown items in the navigation menu">Dropdown Link Color:</Label>
+            <div class="col-sm-9">
+                <div class="input-group">
+                    <input id="nav-dropdown-color" class="form-control" placeholder="#000000" @bind="@_navDropdownColor" />
+                    <button type="button" class="btn btn-secondary" @onclick="@StateHasChanged">Show</button>
+                    <div style="background-color: @_navDropdownColor; width: 50px">&nbsp;</div>
+                </div>
+            </div>
+        </div>
+        <div class="row mb-1 align-items-center">
+            <Label Class="col-sm-3" For="nav-dropdown-hover-color" HelpText="Optionally specify a color is applied to dropdown navigation links when they are hovered over">Dropdown Hover Color:</Label>
+            <div class="col-sm-9">
+                <div class="input-group">
+                    <input id="nav-dropdown-hover-color" class="form-control" placeholder="#000000" @bind="@_navDropdownHoverColor" />
+                    <button type="button" class="btn btn-secondary" @onclick="@StateHasChanged">Show</button>
+                    <div style="background-color: @_navDropdownHoverColor; width: 50px">&nbsp;</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</Section>
+<Section Name="LightSectionColors" Heading="Light Section Colors" ResourceKey="LightSectionColors" Expanded="False">
+    <div class="container">
+        <div class="row mb-1 align-items-center">
+            <Label Class="col-sm-3" For="light-background-background-color" HelpText="Optionally specify a background color for light sections">Background Color:</Label>
+            <div class="col-sm-9">
+                <div class="input-group">
+                    <input id="light-background-background-color" class="form-control" placeholder="#000000" @bind="@_lightBackgroundBackgroundColor" />
+                    <button type="button" class="btn btn-secondary" @onclick="@StateHasChanged">Show</button>
+                    <div style="background-color: @_lightBackgroundBackgroundColor; width: 50px">&nbsp;</div>
+                </div>
+            </div>
+        </div>
+        <div class="row mb-1 align-items-center">
+            <Label Class="col-sm-3" For="light-background-surface-color" HelpText="Optionally specify a surface color for light sections">Surface Color:</Label>
+            <div class="col-sm-9">
+                <div class="input-group">
+                    <input id="light-background-surface-color" class="form-control" placeholder="#000000" @bind="@_lightBackgroundSurfaceColor" />
+                    <button type="button" class="btn btn-secondary" @onclick="@StateHasChanged">Show</button>
+                    <div style="background-color: @_lightBackgroundSurfaceColor; width: 50px">&nbsp;</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</Section>
+<Section Name="DarkSectionColors" Heading="Dark Section Colors" ResourceKey="DarkSectionColors" Expanded="False">
+    <div class="container">
+        <div class="row mb-1 align-items-center">
+            <Label Class="col-sm-3" For="dark-background-background-color" HelpText="Optionally specify a background color for dark sections">Background Color:</Label>
+            <div class="col-sm-9">
+                <div class="input-group">
+                    <input id="dark-background-background-color" class="form-control" placeholder="#000000" @bind="@_darkBackgroundBackgroundColor" />
+                    <button type="button" class="btn btn-secondary" @onclick="@StateHasChanged">Show</button>
+                    <div style="background-color: @_darkBackgroundBackgroundColor; width: 50px">&nbsp;</div>
+                </div>
+            </div>
+        </div>
+        <div class="row mb-1 align-items-center">
+            <Label Class="col-sm-3" For="dark-background-surface-color" HelpText="Optionally specify a surface color for dark sections">Surface Color:</Label>
+            <div class="col-sm-9">
+                <div class="input-group">
+                    <input id="dark-background-surface-color" class="form-control" placeholder="#000000" @bind="@_darkBackgroundSurfaceColor" />
+                    <button type="button" class="btn btn-secondary" @onclick="@StateHasChanged">Show</button>
+                    <div style="background-color: @_darkBackgroundSurfaceColor; width: 50px">&nbsp;</div>
+                </div>
+            </div>
+        </div>
+        <div class="row mb-1 align-items-center">
+            <Label Class="col-sm-3" For="dark-background-default-color" HelpText="Optionally specify a default color for dark sections">Default Color:</Label>
+            <div class="col-sm-9">
+                <div class="input-group">
+                    <input id="dark-background-default-color" class="form-control" placeholder="#000000" @bind="@_darkBackgroundDefaultColor" />
+                    <button type="button" class="btn btn-secondary" @onclick="@StateHasChanged">Show</button>
+                    <div style="background-color: @_darkBackgroundDefaultColor; width: 50px">&nbsp;</div>
+                </div>
+            </div>
+        </div>
+        <div class="row mb-1 align-items-center">
+            <Label Class="col-sm-3" For="dark-background-heading-color" HelpText="Optionally specify a heading color for dark sections">Heading Color:</Label>
+            <div class="col-sm-9">
+                <div class="input-group">
+                    <input id="dark-background-heading-color" class="form-control" placeholder="#000000" @bind="@_darkBackgroundHeadingColor" />
+                    <button type="button" class="btn btn-secondary" @onclick="@StateHasChanged">Show</button>
+                    <div style="background-color: @_darkBackgroundHeadingColor; width: 50px">&nbsp;</div>
+                </div>
+            </div>
+        </div>
+        <div class="row mb-1 align-items-center">
+            <Label Class="col-sm-3" For="dark-background-contrast-color" HelpText="Optionally specify a contrast color for dark sections">Contrast Color:</Label>
+            <div class="col-sm-9">
+                <div class="input-group">
+                    <input id="dark-background-contrast-color" class="form-control" placeholder="#000000" @bind="@_darkBackgroundContrastColor" />
+                    <button type="button" class="btn btn-secondary" @onclick="@StateHasChanged">Show</button>
+                    <div style="background-color: @_darkBackgroundContrastColor; width: 50px">&nbsp;</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</Section>
 
 @code {
     private int pageId = -1;
@@ -89,6 +327,28 @@
     private string _layout = "";
     private string _footer = "False";
     private string _footerHTML = "";
+
+    private string _backgroundColor = "";
+    private string _defaultColor = "";
+    private string _headingColor = "";
+    private string _accentColor = "";
+    private string _surfaceColor = "";
+    private string _contrastColor = "";
+    private string _headerBackgroundColor = "";
+    private string _headerHeadingColor = "";
+    private string _navColor = "";
+    private string _navHoverColor = "";
+    private string _navMobileBackgroundColor = "";
+    private string _navDropdownBackgroundColor = "";
+    private string _navDropdownColor = "";
+    private string _navDropdownHoverColor = "";
+    private string _lightBackgroundBackgroundColor = "";
+    private string _lightBackgroundSurfaceColor = "";
+    private string _darkBackgroundBackgroundColor = "";
+    private string _darkBackgroundSurfaceColor = "";
+    private string _darkBackgroundDefaultColor = "";
+    private string _darkBackgroundHeadingColor = "";
+    private string _darkBackgroundContrastColor = "";
 
     protected override async Task OnInitializedAsync()
     {
@@ -131,6 +391,29 @@
         }
         _footerHTML = SettingService.GetSetting(settings, GetType().Namespace + ":Footer", "");
         _footer = (_footerHTML == "") ? "False" : "True";
+
+        // colors
+        _backgroundColor = SettingService.GetSetting(settings, GetType().Namespace + ":root:--background-color", "");
+        _defaultColor = SettingService.GetSetting(settings, GetType().Namespace + ":root:--default-color", "");
+        _headingColor = SettingService.GetSetting(settings, GetType().Namespace + ":root:--heading-color", "");
+        _accentColor = SettingService.GetSetting(settings, GetType().Namespace + ":root:--accent-color", "");
+        _surfaceColor = SettingService.GetSetting(settings, GetType().Namespace + ":root:--surface-color", "");
+        _contrastColor = SettingService.GetSetting(settings, GetType().Namespace + ":root:--contrast-color", "");
+        _headerBackgroundColor = SettingService.GetSetting(settings, GetType().Namespace + ":.header:--background-color", "");
+        _headerHeadingColor = SettingService.GetSetting(settings, GetType().Namespace + ":.header:--heading-color", "");
+        _navColor = SettingService.GetSetting(settings, GetType().Namespace + ":root:--nav-color", "");
+        _navHoverColor = SettingService.GetSetting(settings, GetType().Namespace + ":root:--nav-hover-color", "");
+        _navMobileBackgroundColor = SettingService.GetSetting(settings, GetType().Namespace + ":root:--nav-mobile-background-color", "");
+        _navDropdownBackgroundColor = SettingService.GetSetting(settings, GetType().Namespace + ":root:--nav-dropdown-background-color", "");
+        _navDropdownColor = SettingService.GetSetting(settings, GetType().Namespace + ":root:--nav-dropdown-color", "");
+        _navDropdownHoverColor = SettingService.GetSetting(settings, GetType().Namespace + ":root:--nav-dropdown-hover-color", "");
+        _lightBackgroundBackgroundColor = SettingService.GetSetting(settings, GetType().Namespace + ":.light-background:--background-color", "");
+        _lightBackgroundSurfaceColor = SettingService.GetSetting(settings, GetType().Namespace + ":.light-background:--surface-color", "");
+        _darkBackgroundBackgroundColor = SettingService.GetSetting(settings, GetType().Namespace + ":.dark-background:--background-color", "");
+        _darkBackgroundSurfaceColor = SettingService.GetSetting(settings, GetType().Namespace + ":.dark-background:--surface-color", "");
+        _darkBackgroundDefaultColor = SettingService.GetSetting(settings, GetType().Namespace + ":.dark-background:--default-color", "");
+        _darkBackgroundHeadingColor = SettingService.GetSetting(settings, GetType().Namespace + ":.dark-background:--heading-color", "");
+        _darkBackgroundContrastColor = SettingService.GetSetting(settings, GetType().Namespace + ":.dark-background:--contrast-color", "");
     }
 
     private void HeroChanged(ChangeEventArgs eventArgs)
@@ -184,7 +467,36 @@
             settings = SettingService.SetSetting(settings, GetType().Namespace + ":NavButtonText", _navbuttontext);
             settings = SettingService.SetSetting(settings, GetType().Namespace + ":NavButtonUrl", _navbuttonurl);
             settings = SettingService.SetSetting(settings, GetType().Namespace + ":Footer", _footerHTML);
+
+            // colors
+            settings = SettingService.SetSetting(settings, GetType().Namespace + ":root:--background-color", _backgroundColor);
+            settings = SettingService.SetSetting(settings, GetType().Namespace + ":root:--default-color", _defaultColor);
+            settings = SettingService.SetSetting(settings, GetType().Namespace + ":root:--heading-color", _headingColor);
+            settings = SettingService.SetSetting(settings, GetType().Namespace + ":root:--accent-color", _accentColor);
+            settings = SettingService.SetSetting(settings, GetType().Namespace + ":root:--surface-color", _surfaceColor);
+            settings = SettingService.SetSetting(settings, GetType().Namespace + ":root:--contrast-color", _contrastColor);
+            settings = SettingService.SetSetting(settings, GetType().Namespace + ":.header:--background-color", _headerBackgroundColor);
+            settings = SettingService.SetSetting(settings, GetType().Namespace + ":.header:--heading-color", _headerHeadingColor);
+            settings = SettingService.SetSetting(settings, GetType().Namespace + ":root:--nav-color", _navColor);
+            settings = SettingService.SetSetting(settings, GetType().Namespace + ":root:--nav-hover-color", _navHoverColor);
+            settings = SettingService.SetSetting(settings, GetType().Namespace + ":root:--nav-mobile-background-color", _navMobileBackgroundColor);
+            settings = SettingService.SetSetting(settings, GetType().Namespace + ":root:--nav-dropdown-background-color", _navDropdownBackgroundColor);
+            settings = SettingService.SetSetting(settings, GetType().Namespace + ":root:--nav-dropdown-color", _navDropdownColor);
+            settings = SettingService.SetSetting(settings, GetType().Namespace + ":root:--nav-dropdown-hover-color", _navDropdownHoverColor);
+            settings = SettingService.SetSetting(settings, GetType().Namespace + ":.light-background:--background-color", _lightBackgroundBackgroundColor);
+            settings = SettingService.SetSetting(settings, GetType().Namespace + ":.light-background:--surface-color", _lightBackgroundSurfaceColor);
+            settings = SettingService.SetSetting(settings, GetType().Namespace + ":.dark-background:--background-color", _darkBackgroundBackgroundColor);
+            settings = SettingService.SetSetting(settings, GetType().Namespace + ":.dark-background:--surface-color", _darkBackgroundSurfaceColor);
+            settings = SettingService.SetSetting(settings, GetType().Namespace + ":.dark-background:--default-color", _darkBackgroundDefaultColor);
+            settings = SettingService.SetSetting(settings, GetType().Namespace + ":.dark-background:--heading-color", _darkBackgroundHeadingColor);
+            settings = SettingService.SetSetting(settings, GetType().Namespace + ":.dark-background:--contrast-color", _darkBackgroundContrastColor);
+
             await SettingService.UpdateSiteSettingsAsync(settings, PageState.Site.SiteId);
+
+            if (UserSecurity.IsAuthorized(PageState.User, RoleNames.Admin))
+            {
+                await CorporateThemeService.UpdateStylesheetAsync(ModuleState.SiteId);
+            }
         }
         catch (Exception ex)
         {

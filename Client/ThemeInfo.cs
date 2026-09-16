@@ -10,7 +10,7 @@ namespace Oqtane.Theme.Corporate
         public Models.Theme Theme => new Models.Theme
         {
             Name = "Corporate Theme",
-            Version = "6.1.2",
+            Version = "10.2.6",
             PackageName = "Oqtane.Theme.Corporate",
             ThemeSettingsType = "Oqtane.Theme.Corporate.ThemeSettings, Oqtane.Theme.Corporate.Client.Oqtane",
             ContainerSettingsType = "Oqtane.Theme.Corporate.ContainerSettings, Oqtane.Theme.Corporate.Client.Oqtane",
@@ -26,6 +26,7 @@ namespace Oqtane.Theme.Corporate
                 new Stylesheet("~/assets/vendor/swiper/swiper-bundle.min.css"),
                 // Main Stylesheet
                 new Stylesheet("~/assets/css/main.css"),
+				new Stylesheet("~/assets/css/override.css"),
                 // JavaScript
                 new Script("~/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"),
                 new Script("~/assets/vendor/aos/aos.js"),

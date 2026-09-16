@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
+    <Version>10.2.6</Version>
+    <Authors>Oqtane Labs Inc</Authors>
+    <Company>Oqtane Labs Inc</Company>
+    <Description>Corporate Theme for Oqtane</Description>
+    <Product>Oqtane.Theme.Corporate</Product>
+    <Copyright>Oqtane Labs Inc</Copyright>
+    <AssemblyName>Oqtane.Theme.Corporate.Server.Oqtane</AssemblyName>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+    <StaticWebAssetsFingerprintContent>false</StaticWebAssetsFingerprintContent>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="10.0.12" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="10.0.12" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.12" />
+    <PackageReference Include="Microsoft.Extensions.Localization" Version="10.0.12" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Oqtane.Server" Version="10.2.6" />
+    <PackageReference Include="Oqtane.Shared" Version="10.2.6" />
+  </ItemGroup>
+</Project>
