@@ -40,15 +40,6 @@
             }
         </div>
     </div>
-    <div class="row mb-1 align-items-center">
-        <Label Class="col-sm-3" For="layout" HelpText="Specify if the modules on this page should include padding around the content">Padding?</Label>
-        <div class="col-sm-9">
-            <select id="layout" class="form-select" @bind="@_layout">
-                <option value="standard">Included</option>
-                <option value="full">None</option>
-            </select>
-        </div>
-    </div>
 </div>
 <Section Name="Hero" Heading="Hero Banner" ResourceKey="Hero" Expanded="False">
     <div class="container">
@@ -324,7 +315,6 @@
     private string _navbuttonurl = "";
     private string _hero = "False";
     private string _heroHTML = "";
-    private string _layout = "";
     private string _footer = "False";
     private string _footerHTML = "";
 
@@ -373,11 +363,6 @@
         var settings = await SettingService.GetPageSettingsAsync(pageId);
         _heroHTML = SettingService.GetSetting(settings, GetType().Namespace + ":Hero", "");
         _hero = (_heroHTML == "") ? "False" : "True";
-        _layout = SettingService.GetSetting(settings, GetType().Namespace + ":Layout", "");
-        if (string.IsNullOrEmpty(_layout))
-        {
-            _layout = (_hero == "False") ? "standard" : "full";
-        }
 
         // site settings
         settings = PageState.Site.Settings;
@@ -425,12 +410,10 @@
             {
                 _heroHTML = Localizer["Hero"];
             }
-            _layout = "full";
         }
         else
         {
             _heroHTML = "";
-            _layout = "standard";
         }
     }
 
@@ -457,7 +440,6 @@
             // page settings
             var settings = await SettingService.GetPageSettingsAsync(pageId);
             settings = SettingService.SetSetting(settings, GetType().Namespace + ":Hero", _heroHTML);
-            settings = SettingService.SetSetting(settings, GetType().Namespace + ":Layout", _layout);
             await SettingService.UpdatePageSettingsAsync(settings, pageId);
 
             // site settings

@@ -49,8 +49,11 @@
         <!-- Page Title -->
         <div class="page-title" data-aos="fade">
             <div class="container">
-                <Breadcrumbs />
-                <h1>@PageState.Page.Name</h1>
+                @if (!string.IsNullOrEmpty(PageState.Page.Path))
+                {
+                    <Breadcrumbs />
+                    <h1>@PageState.Page.Name</h1>
+                }
             </div>
         </div>
         <!-- End Page Title -->

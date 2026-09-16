@@ -14,35 +14,32 @@
             </select>
         </div>
     </div>
-    @if (_layout == "standard")
-    {
-        <div class="row mb-1 align-items-center">
-            <Label Class="col-sm-3" For="title" HelpText="Specify if the module title should be displayed">Display Title?</Label>
-            <div class="col-sm-9">
-                <select id="title" class="form-select" @bind="@_title">
-                    <option value="true">Yes</option>
-                    <option value="false">No</option>
-                </select>
-            </div>
+    <div class="row mb-1 align-items-center">
+        <Label Class="col-sm-3" For="title" HelpText="Specify if the module title should be displayed">Display Title?</Label>
+        <div class="col-sm-9">
+            <select id="title" class="form-select" @bind="@_title">
+                <option value="true">Yes</option>
+                <option value="false">No</option>
+            </select>
         </div>
-        <div class="row mb-1 align-items-center">
-            <Label Class="col-sm-3" For="animate" HelpText="Specify the animation for the module content">Animation:</Label>
-            <div class="col-sm-9">
-                <select id="animate" class="form-select" @bind="@_animate">
-                    <option value="none">None</option>
-                    <option value="fade-up">Fade Up</option>
-                    <option value="fade-down">Fade Down</option>
-                    <option value="fade-right">Fade Right</option>
-                    <option value="fade-left">Fade Left</option>
-                    <option value="flip-up">Flip Up</option>
-                    <option value="flip-down">Flip Down</option>
-                    <option value="flip-right">Flip Right</option>
-                    <option value="flip-left">Flip Left</option>
-                    <option value="zoom-in">Zoom In</option>
-                </select>
-            </div>
+    </div>
+    <div class="row mb-1 align-items-center">
+        <Label Class="col-sm-3" For="animate" HelpText="Specify the animation for the module content">Animation:</Label>
+        <div class="col-sm-9">
+            <select id="animate" class="form-select" @bind="@_animate">
+                <option value="none">None</option>
+                <option value="fade-up">Fade Up</option>
+                <option value="fade-down">Fade Down</option>
+                <option value="fade-right">Fade Right</option>
+                <option value="fade-left">Fade Left</option>
+                <option value="flip-up">Flip Up</option>
+                <option value="flip-down">Flip Down</option>
+                <option value="flip-right">Flip Right</option>
+                <option value="flip-left">Flip Left</option>
+                <option value="zoom-in">Zoom In</option>
+            </select>
         </div>
-    }
+    </div>
 </div>
 
 @code {
@@ -57,11 +54,6 @@
             _layout = SettingService.GetSetting(ModuleState.Settings, GetType().Namespace + ":Layout", "");
             _title = SettingService.GetSetting(ModuleState.Settings, GetType().Namespace + ":Title", "true");
             _animate = SettingService.GetSetting(ModuleState.Settings, GetType().Namespace + ":Animate", "fade-up");
-
-            if (string.IsNullOrEmpty(_layout))
-            {
-                _layout = SettingService.GetSetting(PageState.Page.Settings, GetType().Namespace + ":Layout", "standard");
-            }
         }
         catch (Exception ex)
         {

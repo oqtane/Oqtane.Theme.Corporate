@@ -7,6 +7,7 @@
 @inject IHtmlTextService HtmlTextService
 @inject IModuleService ModuleService
 @inject IPageModuleService PageModuleService
+@inject ISettingService SettingService
 @inject IStringLocalizer<Index> Localizer
 
 @code {
@@ -29,6 +30,13 @@
         var pagemodule = await PageModuleService.GetPageModuleAsync(ModuleState.PageModuleId);
         pagemodule.Title = Localizer[typename + ".Title"];
         await PageModuleService.UpdatePageModuleAsync(pagemodule);
+
+        // update container settings
+        var settings = await SettingService.GetModuleSettingsAsync(ModuleState.ModuleId);
+        settings = SettingService.SetSetting(settings, "Oqtane.Theme.Corporate" + ":Title", "false");
+        settings = SettingService.SetSetting(settings, "Oqtane.Theme.Corporate" + ":Animate", "none");
+        settings = SettingService.SetSetting(settings, "Oqtane.Theme.Corporate" + ":Layout", "full");
+        await SettingService.UpdateModuleSettingsAsync(settings, ModuleState.ModuleId);
 
         // refresh page
         NavigationManager.NavigateTo(Utilities.NavigateUrl(PageState.Alias.Path, PageState.Page.Path, ""));

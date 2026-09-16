@@ -21,13 +21,21 @@
 }
 else
 {
-    <ModuleActions />
-    <ModuleInstance />
+    <div data-aos="@_animate">
+        @if (_title && ModuleState.Title != "-")
+        {
+            <div class="section-title">
+                <h2>@ModuleState.Title</h2>
+            </div>
+        }
+        <ModuleActions />
+        <ModuleInstance />
+    </div>
 }
 
 
 @code {
-    private string _layout = "";
+    private string _layout = "standard";
     private bool _title = true;
     private string _animate = "";
 
@@ -35,16 +43,9 @@ else
     {
         try
         {
-            _layout = SettingService.GetSetting(ModuleState.Settings, GetType().Namespace + ":Layout", "");
-            if (string.IsNullOrEmpty(_layout))
-            {
-                _layout = SettingService.GetSetting(PageState.Page.Settings, GetType().Namespace + ":Layout", "standard");
-            }
-            if (_layout == "standard")
-            {
-                _title = bool.Parse(SettingService.GetSetting(ModuleState.Settings, GetType().Namespace + ":Title", "true"));
-                _animate = SettingService.GetSetting(ModuleState.Settings, GetType().Namespace + ":Animate", "fade-up");
-            }
+            _layout = SettingService.GetSetting(ModuleState.Settings, GetType().Namespace + ":Layout", "standard");
+            _title = bool.Parse(SettingService.GetSetting(ModuleState.Settings, GetType().Namespace + ":Title", "true"));
+            _animate = SettingService.GetSetting(ModuleState.Settings, GetType().Namespace + ":Animate", "fade-up");
         }
         catch
         {
