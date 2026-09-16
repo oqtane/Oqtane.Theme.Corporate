@@ -18,28 +18,54 @@ function initializeTheme() {
      */
     const mobileNavToggleBtn = document.querySelector('.mobile-nav-toggle');
 
-    function mobileNavToogle() {
-        document.querySelector('body').classList.toggle('mobile-nav-active');
-        mobileNavToggleBtn.classList.toggle('bi-list');
-        mobileNavToggleBtn.classList.toggle('bi-x');
+    if (mobileNavToggleBtn) {
+        // Use a more robust approach to handle event listener re-initialization
+        // Clone the element to completely remove all event listeners
+        const newToggleBtn = mobileNavToggleBtn.cloneNode(true);
+        mobileNavToggleBtn.parentNode.replaceChild(newToggleBtn, mobileNavToggleBtn);
+
+        // Add the event listener to the fresh element
+        newToggleBtn.addEventListener('click', function mobileNavToogle() {
+            document.querySelector('body').classList.toggle('mobile-nav-active');
+            this.classList.toggle('bi-list');
+            this.classList.toggle('bi-x');
+        });
     }
-    mobileNavToggleBtn.addEventListener('click', mobileNavToogle);
 
     /**
      * Hide mobile nav on same-page/hash links
      */
+    // Clear existing event listeners first to prevent duplicates
+    document.querySelectorAll('#navmenu a').forEach(navmenu => {
+        // Clone the element to remove all event listeners
+        const newNavmenu = navmenu.cloneNode(true);
+        navmenu.parentNode.replaceChild(newNavmenu, navmenu);
+    });
+
+    // Add fresh event listeners
     document.querySelectorAll('#navmenu a').forEach(navmenu => {
         navmenu.addEventListener('click', () => {
             if (document.querySelector('.mobile-nav-active')) {
-                mobileNavToogle();
+                const mobileNavToggleBtn = document.querySelector('.mobile-nav-toggle');
+                if (mobileNavToggleBtn) {
+                    document.querySelector('body').classList.remove('mobile-nav-active');
+                    mobileNavToggleBtn.classList.remove('bi-x');
+                    mobileNavToggleBtn.classList.add('bi-list');
+                }
             }
         });
-
     });
 
     /**
      * Toggle mobile nav dropdowns
      */
+    // Clear existing dropdown event listeners first
+    document.querySelectorAll('.navmenu .toggle-dropdown').forEach(navmenu => {
+        const newNavmenu = navmenu.cloneNode(true);
+        navmenu.parentNode.replaceChild(newNavmenu, navmenu);
+    });
+
+    // Add fresh dropdown event listeners
     document.querySelectorAll('.navmenu .toggle-dropdown').forEach(navmenu => {
         navmenu.addEventListener('click', function (e) {
             e.preventDefault();
