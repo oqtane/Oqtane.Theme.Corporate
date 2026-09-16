@@ -43,15 +43,15 @@
 </div>
 
 @code {
-    private string _layout = "";
-    private string _title = "";
-    private string _animate = "";
+    private string _layout = "standard";
+    private string _title = "true";
+    private string _animate = "fade-up";
 
     protected override void OnInitialized()
     {
         try
         {
-            _layout = SettingService.GetSetting(ModuleState.Settings, GetType().Namespace + ":Layout", "");
+            _layout = SettingService.GetSetting(ModuleState.Settings, GetType().Namespace + ":Layout", "standard");
             _title = SettingService.GetSetting(ModuleState.Settings, GetType().Namespace + ":Title", "true");
             _animate = SettingService.GetSetting(ModuleState.Settings, GetType().Namespace + ":Animate", "fade-up");
         }
