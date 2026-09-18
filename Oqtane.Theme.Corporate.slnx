@@ -1,4 +1,7 @@
 <Solution>
+  <Project Path="..\Oqtane.Framework\Oqtane.Server\Oqtane.Server.csproj" DefaultStartup="true">
+    <Build Solution="Debug|*" Project="false" />
+  </Project>
   <Project Path="Client\Oqtane.Theme.Corporate.Client.csproj" />
   <Project Path="Server\Oqtane.Theme.Corporate.Server.csproj" />
   <Project Path="Package\Oqtane.Theme.Corporate.Package.csproj" />

@@ -81,7 +81,7 @@
             <Label Class="col-sm-3" For="background-color" HelpText="Optionally specify a background color for the entire website, including individual sections">Background Color:</Label>
             <div class="col-sm-9">
                 <div class="input-group">
-                    <input id="background-color" class="form-control" @bind="@_backgroundColor" />
+                    <input id="background-color" class="form-control" placeholder="#000000" @bind="@_backgroundColor" />
                     <button type="button" class="btn btn-secondary" @onclick="@StateHasChanged">Show</button>
                     <div style="background-color: @_backgroundColor; width: 50px">&nbsp;</div>
                 </div>

@@ -42,23 +42,25 @@ namespace Oqtane.Theme.Corporate.Controllers
 			{
 				try
 				{
-					var styles = new Dictionary<string, string>();
+					var styles = new List<string>();
+
 					var settings = _SettingRepository.GetSettings(EntityNames.Site, siteId);
 					foreach (var setting in settings)
 					{
-						if (setting.SettingName.EndsWith("-color") && !string.IsNullOrEmpty(setting.SettingValue))
+						if (setting.SettingName.StartsWith("Oqtane.Theme.Corporate") && setting.SettingName.EndsWith("-color") && !string.IsNullOrEmpty(setting.SettingValue))
 						{
 							// ie. Namespace:root:--background-color or Namespace:.light-background:--background-color
-							var key = setting.SettingName.Split(':');
-							styles.Add(((key[1] == "root") ? ":" : "") + key[1], $"{key[2]}: {setting.SettingValue};");
+							var segments = setting.SettingName.Split(':');
+							styles.Add(((segments[1] == "root") ? ":" : "") + segments[1] + " {\n  " + segments[2] + ": " + setting.SettingValue + "\n}\n");
 						}
 					}
-
+	
+					// save styles to override.css file
 					var path = Path.Combine(_environment.ContentRootPath, "wwwroot/Themes/Oqtane.Theme.Corporate/assets/css/override.css");
 					var stylesheet = "";
 					foreach (var style in styles)
 					{
-						stylesheet += style.Key + " {\n  " + style.Value + "\n}\n";
+						stylesheet += style;
 					}
 					System.IO.File.WriteAllText(path, stylesheet);
 
