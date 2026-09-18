@@ -51,7 +51,7 @@ namespace Oqtane.Theme.Corporate.Controllers
 						{
 							// ie. Namespace:root:--background-color or Namespace:.light-background:--background-color
 							var segments = setting.SettingName.Split(':');
-							styles.Add(((segments[1] == "root") ? ":" : "") + segments[1] + " {\n  " + segments[2] + ": " + setting.SettingValue + "\n}\n");
+							styles.Add(((segments[1] == "root") ? ":" : "") + segments[1] + " {\n  " + segments[2] + ": " + setting.SettingValue + ";\n}\n");
 						}
 					}
 	
