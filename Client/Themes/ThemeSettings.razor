@@ -1,5 +1,8 @@
 @namespace Oqtane.Theme.Corporate
 @using Oqtane.Theme.Corporate.Services
+@using Microsoft.AspNetCore.Components.Forms
+@using System.IO
+@using System.Text.Json
 @inherits ModuleBase
 @implements Oqtane.Interfaces.ISettingsControl
 @inject ISettingService SettingService
@@ -81,9 +84,16 @@
             <Label Class="col-sm-3" For="background-color" HelpText="Optionally specify a background color for the entire website, including individual sections">Background Color:</Label>
             <div class="col-sm-9">
                 <div class="input-group">
-                    <input id="background-color" class="form-control" placeholder="#000000" @bind="@_backgroundColor" />
-                    <button type="button" class="btn btn-secondary" @onclick="@StateHasChanged">Show</button>
-                    <div style="background-color: @_backgroundColor; width: 50px">&nbsp;</div>
+                    <input id="background-color" type="text" class="form-control" placeholder="#000000" @bind="@_backgroundColor" />
+                    <input id="background-color" type="color" @bind="@_backgroundColor" style="width: 40px; height: 40px;" />
+                    @if (_backgroundColor == backgroundColor)
+                    {
+                        <button type="button" class="btn btn-secondary" disabled>Reset</button>
+                    }
+                    else
+                    {
+                        <button type="button" class="btn btn-primary" @onclick="@(() => ResetColor("backgroundColor"))">Reset</button>
+                    }
                 </div>
             </div>
         </div>
@@ -91,9 +101,16 @@
             <Label Class="col-sm-3" For="default-color" HelpText="Optionally specify a default color used for the majority of the text content across the entire website">Default Color:</Label>
             <div class="col-sm-9">
                 <div class="input-group">
-                    <input id="default-color" class="form-control" placeholder="#000000" @bind="@_defaultColor" />
-                    <button type="button" class="btn btn-secondary" @onclick="@StateHasChanged">Show</button>
-                    <div style="background-color: @_defaultColor; width: 50px">&nbsp;</div>
+                    <input id="default-color" type="text" class="form-control" placeholder="#000000" @bind="@_defaultColor" />
+                    <input id="default-color" type="color" @bind="@_defaultColor" style="width: 40px; height: 40px;" />
+                    @if (_defaultColor == defaultColor)
+                    {
+                        <button type="button" class="btn btn-secondary" disabled>Reset</button>
+                    }
+                    else
+                    {
+                        <button type="button" class="btn btn-primary" @onclick="@(() => ResetColor("defaultColor"))">Reset</button>
+                    }
                 </div>
             </div>
         </div>
@@ -101,9 +118,16 @@
             <Label Class="col-sm-3" For="heading-color" HelpText="Optionally specify a color for headings, subheadings and title throughout the website">Heading Color:</Label>
             <div class="col-sm-9">
                 <div class="input-group">
-                    <input id="heading-color" class="form-control" placeholder="#000000" @bind="@_headingColor" />
-                    <button type="button" class="btn btn-secondary" @onclick="@StateHasChanged">Show</button>
-                    <div style="background-color: @_headingColor; width: 50px">&nbsp;</div>
+                    <input id="heading-color" type="text" class="form-control" placeholder="#000000" @bind="@_headingColor" />
+                    <input id="heading-color" type="color" @bind="@_headingColor" style="width: 40px; height: 40px;" />
+                    @if (_headingColor == headingColor)
+                    {
+                        <button type="button" class="btn btn-secondary" disabled>Reset</button>
+                    }
+                    else
+                    {
+                        <button type="button" class="btn btn-primary" @onclick="@(() => ResetColor("headingColor"))">Reset</button>
+                    }
                 </div>
             </div>
         </div>
@@ -111,9 +135,16 @@
             <Label Class="col-sm-3" For="accent-color" HelpText="Optionally specify an color that represents your brand on the website. It's used for buttons, links, and other elements that need to stand out">Accent Color:</Label>
             <div class="col-sm-9">
                 <div class="input-group">
-                    <input id="accent-color" class="form-control" placeholder="#000000" @bind="@_accentColor" />
-                    <button type="button" class="btn btn-secondary" @onclick="@StateHasChanged">Show</button>
-                    <div style="background-color: @_accentColor; width: 50px">&nbsp;</div>
+                    <input id="accent-color" type="text" class="form-control" placeholder="#000000" @bind="@_accentColor" />
+                    <input id="accent-color" type="color" @bind="@_accentColor" style="width: 40px; height: 40px;" />
+                    @if (_accentColor == accentColor)
+                    {
+                        <button type="button" class="btn btn-secondary" disabled>Reset</button>
+                    }
+                    else
+                    {
+                        <button type="button" class="btn btn-primary" @onclick="@(() => ResetColor("accentColor"))">Reset</button>
+                    }
                 </div>
             </div>
         </div>
@@ -121,9 +152,16 @@
             <Label Class="col-sm-3" For="surface-color" HelpText="Optionally specify a surface color is used as a background of boxed elements within sections, such as cards, icon boxes, or other elements that require a visual separation from the global background">Surface Color:</Label>
             <div class="col-sm-9">
                 <div class="input-group">
-                    <input id="surface-color" class="form-control" placeholder="#000000" @bind="@_surfaceColor" />
-                    <button type="button" class="btn btn-secondary" @onclick="@StateHasChanged">Show</button>
-                    <div style="background-color: @_surfaceColor; width: 50px">&nbsp;</div>
+                    <input id="surface-color" type="text" class="form-control" placeholder="#000000" @bind="@_surfaceColor" />
+                    <input id="surface-color" type="color" @bind="@_surfaceColor" style="width: 40px; height: 40px;" />
+                    @if (_surfaceColor == surfaceColor)
+                    {
+                        <button type="button" class="btn btn-secondary" disabled>Reset</button>
+                    }
+                    else
+                    {
+                        <button type="button" class="btn btn-primary" @onclick="@(() => ResetColor("surfaceColor"))">Reset</button>
+                    }
                 </div>
             </div>
         </div>
@@ -131,9 +169,16 @@
             <Label Class="col-sm-3" For="contrast-color" HelpText="Optionally specify a contrast color for text, ensuring readability against backgrounds of accent, heading, or default colors">Contrast Color:</Label>
             <div class="col-sm-9">
                 <div class="input-group">
-                    <input id="contrast-color" class="form-control" placeholder="#000000" @bind="@_contrastColor" />
-                    <button type="button" class="btn btn-secondary" @onclick="@StateHasChanged">Show</button>
-                    <div style="background-color: @_contrastColor; width: 50px">&nbsp;</div>
+                    <input id="contrast-color" type="text" class="form-control" placeholder="#000000" @bind="@_contrastColor" />
+                    <input id="contrast-color" type="color" @bind="@_contrastColor" style="width: 40px; height: 40px;" />
+                    @if (_contrastColor == contrastColor)
+                    {
+                        <button type="button" class="btn btn-secondary" disabled>Reset</button>
+                    }
+                    else
+                    {
+                        <button type="button" class="btn btn-primary" @onclick="@(() => ResetColor("contrastColor"))">Reset</button>
+                    }
                 </div>
             </div>
         </div>
@@ -145,9 +190,16 @@
             <Label Class="col-sm-3" For="header-background-color" HelpText="Optionally specify a color for the site header">Background Color:</Label>
             <div class="col-sm-9">
                 <div class="input-group">
-                    <input id="header-background-color" class="form-control" placeholder="#000000" @bind="@_headerBackgroundColor" />
-                    <button type="button" class="btn btn-secondary" @onclick="@StateHasChanged">Show</button>
-                    <div style="background-color: @_headerBackgroundColor; width: 50px">&nbsp;</div>
+                    <input id="header-background-color" type="text" class="form-control" placeholder="#000000" @bind="@_headerBackgroundColor" />
+                    <input id="header-background-color" type="color" @bind="@_headerBackgroundColor" style="width: 40px; height: 40px;" />
+                    @if (_headerBackgroundColor == headerBackgroundColor)
+                    {
+                        <button type="button" class="btn btn-secondary" disabled>Reset</button>
+                    }
+                    else
+                    {
+                        <button type="button" class="btn btn-primary" @onclick="@(() => ResetColor("headerBackgroundColor"))">Reset</button>
+                    }
                 </div>
             </div>
         </div>
@@ -155,9 +207,16 @@
             <Label Class="col-sm-3" For="header-heading-color" HelpText="Optionally specify a color for the header heading color">Heading Color:</Label>
             <div class="col-sm-9">
                 <div class="input-group">
-                    <input id="header-heading-color" class="form-control" placeholder="#000000" @bind="@_headerHeadingColor" />
-                    <button type="button" class="btn btn-secondary" @onclick="@StateHasChanged">Show</button>
-                    <div style="background-color: @_headerHeadingColor; width: 50px">&nbsp;</div>
+                    <input id="header-heading-color" type="text" class="form-control" placeholder="#000000" @bind="@_headerHeadingColor" />
+                    <input id="header-heading-color" type="color" @bind="@_headerHeadingColor" style="width: 40px; height: 40px;" />
+                    @if (_headerHeadingColor == headerHeadingColor)
+                    {
+                        <button type="button" class="btn btn-secondary" disabled>Reset</button>
+                    }
+                    else
+                    {
+                        <button type="button" class="btn btn-primary" @onclick="@(() => ResetColor("headerHeadingColor"))">Reset</button>
+                    }
                 </div>
             </div>
         </div>
@@ -169,9 +228,16 @@
             <Label Class="col-sm-3" For="nav-color" HelpText="Optionally specify a default color of the main navmenu links">Link Color:</Label>
             <div class="col-sm-9">
                 <div class="input-group">
-                    <input id="nav-color" class="form-control" placeholder="#000000" @bind="@_navColor" />
-                    <button type="button" class="btn btn-secondary" @onclick="@StateHasChanged">Show</button>
-                    <div style="background-color: @_navColor; width: 50px">&nbsp;</div>
+                    <input id="nav-color" type="text" class="form-control" placeholder="#000000" @bind="@_navColor" />
+                    <input id="nav-color" type="color" @bind="@_navColor" style="width: 40px; height: 40px;" />
+                    @if (_navColor == navColor)
+                    {
+                        <button type="button" class="btn btn-secondary" disabled>Reset</button>
+                    }
+                    else
+                    {
+                        <button type="button" class="btn btn-primary" @onclick="@(() => ResetColor("navColor"))">Reset</button>
+                    }
                 </div>
             </div>
         </div>
@@ -179,9 +245,16 @@
             <Label Class="col-sm-3" For="nav-hover-color" HelpText="Optionally specify a color for the main navmenu links when they are hovered over or active">Hover Color:</Label>
             <div class="col-sm-9">
                 <div class="input-group">
-                    <input id="nav-hover-color" class="form-control" placeholder="#000000" @bind="@_navHoverColor" />
-                    <button type="button" class="btn btn-secondary" @onclick="@StateHasChanged">Show</button>
-                    <div style="background-color: @_navHoverColor; width: 50px">&nbsp;</div>
+                    <input id="nav-hover-color" type="text" class="form-control" placeholder="#000000" @bind="@_navHoverColor" />
+                    <input id="nav-hover-color" type="color" @bind="@_navHoverColor" style="width: 40px; height: 40px;" />
+                    @if (_navHoverColor == navHoverColor)
+                    {
+                        <button type="button" class="btn btn-secondary" disabled>Reset</button>
+                    }
+                    else
+                    {
+                        <button type="button" class="btn btn-primary" @onclick="@(() => ResetColor("navHoverColor"))">Reset</button>
+                    }
                 </div>
             </div>
         </div>
@@ -189,9 +262,16 @@
             <Label Class="col-sm-3" For="nav-mobile-background-color" HelpText="Optionally specify a background color for mobile navigation menu">Mobile Background Color:</Label>
             <div class="col-sm-9">
                 <div class="input-group">
-                    <input id="nav-mobile-background-color" class="form-control" placeholder="#000000" @bind="@_navMobileBackgroundColor" />
-                    <button type="button" class="btn btn-secondary" @onclick="@StateHasChanged">Show</button>
-                    <div style="background-color: @_navMobileBackgroundColor; width: 50px">&nbsp;</div>
+                    <input id="nav-mobile-background-color" type="text" class="form-control" placeholder="#000000" @bind="@_navMobileBackgroundColor" />
+                    <input id="nav-mobile-background-color" type="color" @bind="@_navMobileBackgroundColor" style="width: 40px; height: 40px;" />
+                    @if (_navMobileBackgroundColor == navMobileBackgroundColor)
+                    {
+                        <button type="button" class="btn btn-secondary" disabled>Reset</button>
+                    }
+                    else
+                    {
+                        <button type="button" class="btn btn-primary" @onclick="@(() => ResetColor("navMobileBackgroundColor"))">Reset</button>
+                    }
                 </div>
             </div>
         </div>
@@ -199,9 +279,16 @@
             <Label Class="col-sm-3" For="nav-dropdown-background-color" HelpText="Optionally specify a background color for dropdown items that appear when hovering over primary navigation items">Dropdown Background Color:</Label>
             <div class="col-sm-9">
                 <div class="input-group">
-                    <input id="nav-dropdown-background-color" class="form-control" placeholder="#000000" @bind="@_navDropdownBackgroundColor" />
-                    <button type="button" class="btn btn-secondary" @onclick="@StateHasChanged">Show</button>
-                    <div style="background-color: @_navDropdownBackgroundColor; width: 50px">&nbsp;</div>
+                    <input id="nav-dropdown-background-color" type="text" class="form-control" placeholder="#000000" @bind="@_navDropdownBackgroundColor" />
+                    <input id="nav-dropdown-background-color" type="color" @bind="@_navDropdownBackgroundColor" style="width: 40px; height: 40px;" />
+                    @if (_navDropdownBackgroundColor == navDropdownBackgroundColor)
+                    {
+                        <button type="button" class="btn btn-secondary" disabled>Reset</button>
+                    }
+                    else
+                    {
+                        <button type="button" class="btn btn-primary" @onclick="@(() => ResetColor("navDropdownBackgroundColor"))">Reset</button>
+                    }
                 </div>
             </div>
         </div>
@@ -209,9 +296,16 @@
             <Label Class="col-sm-3" For="nav-dropdown-color" HelpText="Optionally specify a color for navigation links of the dropdown items in the navigation menu">Dropdown Link Color:</Label>
             <div class="col-sm-9">
                 <div class="input-group">
-                    <input id="nav-dropdown-color" class="form-control" placeholder="#000000" @bind="@_navDropdownColor" />
-                    <button type="button" class="btn btn-secondary" @onclick="@StateHasChanged">Show</button>
-                    <div style="background-color: @_navDropdownColor; width: 50px">&nbsp;</div>
+                    <input id="nav-dropdown-color" type="text" class="form-control" placeholder="#000000" @bind="@_navDropdownColor" />
+                    <input id="nav-dropdown-color" type="color" @bind="@_navDropdownColor" style="width: 40px; height: 40px;" />
+                    @if (_navDropdownColor == navDropdownColor)
+                    {
+                        <button type="button" class="btn btn-secondary" disabled>Reset</button>
+                    }
+                    else
+                    {
+                        <button type="button" class="btn btn-primary" @onclick="@(() => ResetColor("navDropdownColor"))">Reset</button>
+                    }
                 </div>
             </div>
         </div>
@@ -219,9 +313,16 @@
             <Label Class="col-sm-3" For="nav-dropdown-hover-color" HelpText="Optionally specify a color is applied to dropdown navigation links when they are hovered over">Dropdown Hover Color:</Label>
             <div class="col-sm-9">
                 <div class="input-group">
-                    <input id="nav-dropdown-hover-color" class="form-control" placeholder="#000000" @bind="@_navDropdownHoverColor" />
-                    <button type="button" class="btn btn-secondary" @onclick="@StateHasChanged">Show</button>
-                    <div style="background-color: @_navDropdownHoverColor; width: 50px">&nbsp;</div>
+                    <input id="nav-dropdown-hover-color" type="text" class="form-control" placeholder="#000000" @bind="@_navDropdownHoverColor" />
+                    <input id="nav-dropdown-hover-color" type="color" @bind="@_navDropdownHoverColor" style="width: 40px; height: 40px;" />
+                    @if (_navDropdownHoverColor == navDropdownHoverColor)
+                    {
+                        <button type="button" class="btn btn-secondary" disabled>Reset</button>
+                    }
+                    else
+                    {
+                        <button type="button" class="btn btn-primary" @onclick="@(() => ResetColor("navDropdownHoverColor"))">Reset</button>
+                    }
                 </div>
             </div>
         </div>
@@ -233,9 +334,16 @@
             <Label Class="col-sm-3" For="light-background-background-color" HelpText="Optionally specify a background color for light sections">Background Color:</Label>
             <div class="col-sm-9">
                 <div class="input-group">
-                    <input id="light-background-background-color" class="form-control" placeholder="#000000" @bind="@_lightBackgroundBackgroundColor" />
-                    <button type="button" class="btn btn-secondary" @onclick="@StateHasChanged">Show</button>
-                    <div style="background-color: @_lightBackgroundBackgroundColor; width: 50px">&nbsp;</div>
+                    <input id="light-background-background-color" type="text" class="form-control" placeholder="#000000" @bind="@_lightBackgroundBackgroundColor" />
+                    <input id="light-background-background-color" type="color" @bind="@_lightBackgroundBackgroundColor" style="width: 40px; height: 40px;" />
+                    @if (_lightBackgroundBackgroundColor == lightBackgroundBackgroundColor)
+                    {
+                        <button type="button" class="btn btn-secondary" disabled>Reset</button>
+                    }
+                    else
+                    {
+                        <button type="button" class="btn btn-primary" @onclick="@(() => ResetColor("lightBackgroundBackgroundColor"))">Reset</button>
+                    }
                 </div>
             </div>
         </div>
@@ -243,9 +351,16 @@
             <Label Class="col-sm-3" For="light-background-surface-color" HelpText="Optionally specify a surface color for light sections">Surface Color:</Label>
             <div class="col-sm-9">
                 <div class="input-group">
-                    <input id="light-background-surface-color" class="form-control" placeholder="#000000" @bind="@_lightBackgroundSurfaceColor" />
-                    <button type="button" class="btn btn-secondary" @onclick="@StateHasChanged">Show</button>
-                    <div style="background-color: @_lightBackgroundSurfaceColor; width: 50px">&nbsp;</div>
+                    <input id="light-background-surface-color" type="text" class="form-control" placeholder="#000000" @bind="@_lightBackgroundSurfaceColor" />
+                    <input id="light-background-surface-color" type="color" @bind="@_lightBackgroundSurfaceColor" style="width: 40px; height: 40px;" />
+                    @if (_lightBackgroundSurfaceColor == lightBackgroundSurfaceColor)
+                    {
+                        <button type="button" class="btn btn-secondary" disabled>Reset</button>
+                    }
+                    else
+                    {
+                        <button type="button" class="btn btn-primary" @onclick="@(() => ResetColor("lightBackgroundSurfaceColor"))">Reset</button>
+                    }
                 </div>
             </div>
         </div>
@@ -257,9 +372,16 @@
             <Label Class="col-sm-3" For="dark-background-background-color" HelpText="Optionally specify a background color for dark sections">Background Color:</Label>
             <div class="col-sm-9">
                 <div class="input-group">
-                    <input id="dark-background-background-color" class="form-control" placeholder="#000000" @bind="@_darkBackgroundBackgroundColor" />
-                    <button type="button" class="btn btn-secondary" @onclick="@StateHasChanged">Show</button>
-                    <div style="background-color: @_darkBackgroundBackgroundColor; width: 50px">&nbsp;</div>
+                    <input id="dark-background-background-color" type="text" class="form-control" placeholder="#000000" @bind="@_darkBackgroundBackgroundColor" />
+                    <input id="dark-background-background-color" type="color" @bind="@_darkBackgroundBackgroundColor" style="width: 40px; height: 40px;" />
+                    @if (_darkBackgroundBackgroundColor == darkBackgroundBackgroundColor)
+                    {
+                        <button type="button" class="btn btn-secondary" disabled>Reset</button>
+                    }
+                    else
+                    {
+                        <button type="button" class="btn btn-primary" @onclick="@(() => ResetColor("darkBackgroundBackgroundColor"))">Reset</button>
+                    }
                 </div>
             </div>
         </div>
@@ -267,9 +389,16 @@
             <Label Class="col-sm-3" For="dark-background-surface-color" HelpText="Optionally specify a surface color for dark sections">Surface Color:</Label>
             <div class="col-sm-9">
                 <div class="input-group">
-                    <input id="dark-background-surface-color" class="form-control" placeholder="#000000" @bind="@_darkBackgroundSurfaceColor" />
-                    <button type="button" class="btn btn-secondary" @onclick="@StateHasChanged">Show</button>
-                    <div style="background-color: @_darkBackgroundSurfaceColor; width: 50px">&nbsp;</div>
+                    <input id="dark-background-surface-color" type="text" class="form-control" placeholder="#000000" @bind="@_darkBackgroundSurfaceColor" />
+                    <input id="dark-background-surface-color" type="color" @bind="@_darkBackgroundSurfaceColor" style="width: 40px; height: 40px;" />
+                    @if (_darkBackgroundSurfaceColor == darkBackgroundSurfaceColor)
+                    {
+                        <button type="button" class="btn btn-secondary" disabled>Reset</button>
+                    }
+                    else
+                    {
+                        <button type="button" class="btn btn-primary" @onclick="@(() => ResetColor("darkBackgroundSurfaceColor"))">Reset</button>
+                    }
                 </div>
             </div>
         </div>
@@ -277,9 +406,16 @@
             <Label Class="col-sm-3" For="dark-background-default-color" HelpText="Optionally specify a default color for dark sections">Default Color:</Label>
             <div class="col-sm-9">
                 <div class="input-group">
-                    <input id="dark-background-default-color" class="form-control" placeholder="#000000" @bind="@_darkBackgroundDefaultColor" />
-                    <button type="button" class="btn btn-secondary" @onclick="@StateHasChanged">Show</button>
-                    <div style="background-color: @_darkBackgroundDefaultColor; width: 50px">&nbsp;</div>
+                    <input id="dark-background-default-color" type="text" class="form-control" placeholder="#000000" @bind="@_darkBackgroundDefaultColor" />
+                    <input id="dark-background-default-color" type="color" @bind="@_darkBackgroundDefaultColor" style="width: 40px; height: 40px;" />
+                    @if (_darkBackgroundDefaultColor == darkBackgroundDefaultColor)
+                    {
+                        <button type="button" class="btn btn-secondary" disabled>Reset</button>
+                    }
+                    else
+                    {
+                        <button type="button" class="btn btn-primary" @onclick="@(() => ResetColor("darkBackgroundDefaultColor"))">Reset</button>
+                    }
                 </div>
             </div>
         </div>
@@ -287,9 +423,16 @@
             <Label Class="col-sm-3" For="dark-background-heading-color" HelpText="Optionally specify a heading color for dark sections">Heading Color:</Label>
             <div class="col-sm-9">
                 <div class="input-group">
-                    <input id="dark-background-heading-color" class="form-control" placeholder="#000000" @bind="@_darkBackgroundHeadingColor" />
-                    <button type="button" class="btn btn-secondary" @onclick="@StateHasChanged">Show</button>
-                    <div style="background-color: @_darkBackgroundHeadingColor; width: 50px">&nbsp;</div>
+                    <input id="dark-background-heading-color" type="text" class="form-control" placeholder="#000000" @bind="@_darkBackgroundHeadingColor" />
+                    <input id="dark-background-heading-color" type="color" @bind="@_darkBackgroundHeadingColor" style="width: 40px; height: 40px;" />
+                    @if (_darkBackgroundHeadingColor == darkBackgroundHeadingColor)
+                    {
+                        <button type="button" class="btn btn-secondary" disabled>Reset</button>
+                    }
+                    else
+                    {
+                        <button type="button" class="btn btn-primary" @onclick="@(() => ResetColor("darkBackgroundHeadingColor"))">Reset</button>
+                    }
                 </div>
             </div>
         </div>
@@ -297,10 +440,33 @@
             <Label Class="col-sm-3" For="dark-background-contrast-color" HelpText="Optionally specify a contrast color for dark sections">Contrast Color:</Label>
             <div class="col-sm-9">
                 <div class="input-group">
-                    <input id="dark-background-contrast-color" class="form-control" placeholder="#000000" @bind="@_darkBackgroundContrastColor" />
-                    <button type="button" class="btn btn-secondary" @onclick="@StateHasChanged">Show</button>
-                    <div style="background-color: @_darkBackgroundContrastColor; width: 50px">&nbsp;</div>
+                    <input id="dark-background-contrast-color" type="text" class="form-control" placeholder="#000000" @bind="@_darkBackgroundContrastColor" />
+                    <input id="dark-background-contrast-color" type="color" @bind="@_darkBackgroundContrastColor" style="width: 40px; height: 40px;" />
+                    @if (_darkBackgroundContrastColor == darkBackgroundContrastColor)
+                    {
+                        <button type="button" class="btn btn-secondary" disabled>Reset</button>
+                    }
+                    else
+                    {
+                        <button type="button" class="btn btn-primary" @onclick="@(() => ResetColor("darkBackgroundContrastColor"))">Reset</button>
+                    }
                 </div>
+            </div>
+        </div>
+    </div>
+</Section>
+<Section Name="ImportExport" Heading="Import/Export" ResourceKey="ImportExport" Expanded="False">
+    <div class="container">
+        <div class="row mb-1 align-items-center">
+            <Label Class="col-sm-3" For="export" HelpText="Export current theme colors">Export Colors:</Label>
+            <div class="col-sm-9">
+                <a class="btn btn-secondary" href="@GetExportUrl()" download="@_exportFileName">Export</a>
+            </div>
+        </div>
+        <div class="row mb-1 align-items-center">
+            <Label Class="col-sm-3" For="import" HelpText="Import theme colors">Import Colors:</Label>
+            <div class="col-sm-9">
+                <InputFile id="import" class="form-control" accept=".json,application/json" OnChange="ImportColorsAsync" />
             </div>
         </div>
     </div>
@@ -317,6 +483,29 @@
     private string _heroHTML = "";
     private string _footer = "False";
     private string _footerHTML = "";
+
+    // default theme colors
+    private string backgroundColor = "#ffffff";
+    private string defaultColor = "#444444";
+    private string headingColor = "#37517e";
+    private string accentColor = "#47b2e4";
+    private string surfaceColor = "#ffffff";
+    private string contrastColor = "#ffffff";
+    private string headerBackgroundColor = "#3d4d6a";
+    private string headerHeadingColor = "#ffffff";
+    private string navColor = "#ffffff";
+    private string navHoverColor = "#47b2e4";
+    private string navMobileBackgroundColor = "#ffffff";
+    private string navDropdownBackgroundColor = "#ffffff";
+    private string navDropdownColor = "#444444";
+    private string navDropdownHoverColor = "#47b2e4";
+    private string lightBackgroundBackgroundColor = "#f5f6f8";
+    private string lightBackgroundSurfaceColor = "#ffffff";
+    private string darkBackgroundBackgroundColor = "#37517e";
+    private string darkBackgroundSurfaceColor = "#ffffff";
+    private string darkBackgroundDefaultColor = "#ffffff";
+    private string darkBackgroundHeadingColor = "#4668a2";
+    private string darkBackgroundContrastColor = "#ffffff";
 
     private string _backgroundColor = "";
     private string _defaultColor = "";
@@ -339,6 +528,8 @@
     private string _darkBackgroundDefaultColor = "";
     private string _darkBackgroundHeadingColor = "";
     private string _darkBackgroundContrastColor = "";
+
+    private string _exportFileName = "corporate-theme-colors.json";
 
     protected override async Task OnInitializedAsync()
     {
@@ -378,27 +569,27 @@
         _footer = (_footerHTML == "") ? "False" : "True";
 
         // colors
-        _backgroundColor = SettingService.GetSetting(settings, GetType().Namespace + ":root:--background-color", "");
-        _defaultColor = SettingService.GetSetting(settings, GetType().Namespace + ":root:--default-color", "");
-        _headingColor = SettingService.GetSetting(settings, GetType().Namespace + ":root:--heading-color", "");
-        _accentColor = SettingService.GetSetting(settings, GetType().Namespace + ":root:--accent-color", "");
-        _surfaceColor = SettingService.GetSetting(settings, GetType().Namespace + ":root:--surface-color", "");
-        _contrastColor = SettingService.GetSetting(settings, GetType().Namespace + ":root:--contrast-color", "");
-        _headerBackgroundColor = SettingService.GetSetting(settings, GetType().Namespace + ":.header:--background-color", "");
-        _headerHeadingColor = SettingService.GetSetting(settings, GetType().Namespace + ":.header:--heading-color", "");
-        _navColor = SettingService.GetSetting(settings, GetType().Namespace + ":root:--nav-color", "");
-        _navHoverColor = SettingService.GetSetting(settings, GetType().Namespace + ":root:--nav-hover-color", "");
-        _navMobileBackgroundColor = SettingService.GetSetting(settings, GetType().Namespace + ":root:--nav-mobile-background-color", "");
-        _navDropdownBackgroundColor = SettingService.GetSetting(settings, GetType().Namespace + ":root:--nav-dropdown-background-color", "");
-        _navDropdownColor = SettingService.GetSetting(settings, GetType().Namespace + ":root:--nav-dropdown-color", "");
-        _navDropdownHoverColor = SettingService.GetSetting(settings, GetType().Namespace + ":root:--nav-dropdown-hover-color", "");
-        _lightBackgroundBackgroundColor = SettingService.GetSetting(settings, GetType().Namespace + ":.light-background:--background-color", "");
-        _lightBackgroundSurfaceColor = SettingService.GetSetting(settings, GetType().Namespace + ":.light-background:--surface-color", "");
-        _darkBackgroundBackgroundColor = SettingService.GetSetting(settings, GetType().Namespace + ":.dark-background:--background-color", "");
-        _darkBackgroundSurfaceColor = SettingService.GetSetting(settings, GetType().Namespace + ":.dark-background:--surface-color", "");
-        _darkBackgroundDefaultColor = SettingService.GetSetting(settings, GetType().Namespace + ":.dark-background:--default-color", "");
-        _darkBackgroundHeadingColor = SettingService.GetSetting(settings, GetType().Namespace + ":.dark-background:--heading-color", "");
-        _darkBackgroundContrastColor = SettingService.GetSetting(settings, GetType().Namespace + ":.dark-background:--contrast-color", "");
+        _backgroundColor = GetSetting(settings, GetType().Namespace + ":root:--background-color", backgroundColor);
+        _defaultColor = GetSetting(settings, GetType().Namespace + ":root:--default-color", defaultColor);
+        _headingColor = GetSetting(settings, GetType().Namespace + ":root:--heading-color", headingColor);
+        _accentColor = GetSetting(settings, GetType().Namespace + ":root:--accent-color", accentColor);
+        _surfaceColor = GetSetting(settings, GetType().Namespace + ":root:--surface-color", surfaceColor);
+        _contrastColor = GetSetting(settings, GetType().Namespace + ":root:--contrast-color", contrastColor);
+        _headerBackgroundColor = GetSetting(settings, GetType().Namespace + ":.header:--background-color", headerBackgroundColor);
+        _headerHeadingColor = GetSetting(settings, GetType().Namespace + ":.header:--heading-color", headerHeadingColor);
+        _navColor = GetSetting(settings, GetType().Namespace + ":root:--nav-color", navColor);
+        _navHoverColor = GetSetting(settings, GetType().Namespace + ":root:--nav-hover-color", navHoverColor);
+        _navMobileBackgroundColor = GetSetting(settings, GetType().Namespace + ":root:--nav-mobile-background-color", navMobileBackgroundColor);
+        _navDropdownBackgroundColor = GetSetting(settings, GetType().Namespace + ":root:--nav-dropdown-background-color", navDropdownBackgroundColor);
+        _navDropdownColor = GetSetting(settings, GetType().Namespace + ":root:--nav-dropdown-color", navDropdownColor);
+        _navDropdownHoverColor = GetSetting(settings, GetType().Namespace + ":root:--nav-dropdown-hover-color", navDropdownHoverColor);
+        _lightBackgroundBackgroundColor = GetSetting(settings, GetType().Namespace + ":.light-background:--background-color", lightBackgroundBackgroundColor);
+        _lightBackgroundSurfaceColor = GetSetting(settings, GetType().Namespace + ":.light-background:--surface-color", lightBackgroundSurfaceColor);
+        _darkBackgroundBackgroundColor = GetSetting(settings, GetType().Namespace + ":.dark-background:--background-color", darkBackgroundBackgroundColor);
+        _darkBackgroundSurfaceColor = GetSetting(settings, GetType().Namespace + ":.dark-background:--surface-color", darkBackgroundSurfaceColor);
+        _darkBackgroundDefaultColor = GetSetting(settings, GetType().Namespace + ":.dark-background:--default-color", darkBackgroundDefaultColor);
+        _darkBackgroundHeadingColor = GetSetting(settings, GetType().Namespace + ":.dark-background:--heading-color", darkBackgroundHeadingColor);
+        _darkBackgroundContrastColor = GetSetting(settings, GetType().Namespace + ":.dark-background:--contrast-color", darkBackgroundContrastColor);
     }
 
     private void HeroChanged(ChangeEventArgs eventArgs)
@@ -433,6 +624,77 @@
         }
     }
 
+    private void ResetColor(string color)
+    {
+        switch (color)
+        {
+            case "backgroundColor":
+                _backgroundColor = backgroundColor;
+                break;
+            case "defaultColor":
+                _defaultColor = defaultColor;
+                break;
+            case "headingColor":
+                _headingColor = headingColor;
+                break;
+            case "accentColor":
+                _accentColor = accentColor;
+                break;
+            case "surfaceColor":
+                _surfaceColor = surfaceColor;
+                break;
+            case "contrastColor":
+                _contrastColor = contrastColor;
+                break;
+            case "headerBackgroundColor":
+                _headerBackgroundColor = headerBackgroundColor;
+                break;
+            case "headerHeadingColor":
+                _headerHeadingColor = headerHeadingColor;
+                break;
+            case "navColor":
+                _navColor = navColor;
+                break;
+            case "navHoverColor":
+                _navHoverColor = navHoverColor;
+                break;
+            case "navMobileBackgroundColor":
+                _navMobileBackgroundColor = navMobileBackgroundColor;
+                break;
+            case "navDropdownBackgroundColor":
+                _navDropdownBackgroundColor = navDropdownBackgroundColor;
+                break;
+            case "navDropdownColor":
+                _navDropdownColor = navDropdownColor;
+                break;
+            case "navDropdownHoverColor":
+                _navDropdownHoverColor = navDropdownHoverColor;
+                break;
+            case "lightBackgroundBackgroundColor":
+                _lightBackgroundBackgroundColor = lightBackgroundBackgroundColor;
+                break;
+            case "lightBackgroundSurfaceColor":
+                _lightBackgroundSurfaceColor = lightBackgroundSurfaceColor;
+                break;
+            case "darkBackgroundBackgroundColor":
+                _darkBackgroundBackgroundColor = darkBackgroundBackgroundColor;
+                break;
+            case "darkBackgroundSurfaceColor":
+                _darkBackgroundSurfaceColor = darkBackgroundSurfaceColor;
+                break;
+            case "darkBackgroundDefaultColor":
+                _darkBackgroundDefaultColor = darkBackgroundDefaultColor;
+                break;
+            case "darkBackgroundHeadingColor":
+                _darkBackgroundHeadingColor = darkBackgroundHeadingColor;
+                break;
+            case "darkBackgroundContrastColor":
+                _darkBackgroundContrastColor = darkBackgroundContrastColor;
+                break;
+        }
+        StateHasChanged();
+    }
+
     public async Task UpdateSettings()
     {
         try
@@ -451,27 +713,27 @@
             settings = SettingService.SetSetting(settings, GetType().Namespace + ":Footer", _footerHTML);
 
             // colors
-            settings = SettingService.SetSetting(settings, GetType().Namespace + ":root:--background-color", _backgroundColor);
-            settings = SettingService.SetSetting(settings, GetType().Namespace + ":root:--default-color", _defaultColor);
-            settings = SettingService.SetSetting(settings, GetType().Namespace + ":root:--heading-color", _headingColor);
-            settings = SettingService.SetSetting(settings, GetType().Namespace + ":root:--accent-color", _accentColor);
-            settings = SettingService.SetSetting(settings, GetType().Namespace + ":root:--surface-color", _surfaceColor);
-            settings = SettingService.SetSetting(settings, GetType().Namespace + ":root:--contrast-color", _contrastColor);
-            settings = SettingService.SetSetting(settings, GetType().Namespace + ":.header:--background-color", _headerBackgroundColor);
-            settings = SettingService.SetSetting(settings, GetType().Namespace + ":.header:--heading-color", _headerHeadingColor);
-            settings = SettingService.SetSetting(settings, GetType().Namespace + ":root:--nav-color", _navColor);
-            settings = SettingService.SetSetting(settings, GetType().Namespace + ":root:--nav-hover-color", _navHoverColor);
-            settings = SettingService.SetSetting(settings, GetType().Namespace + ":root:--nav-mobile-background-color", _navMobileBackgroundColor);
-            settings = SettingService.SetSetting(settings, GetType().Namespace + ":root:--nav-dropdown-background-color", _navDropdownBackgroundColor);
-            settings = SettingService.SetSetting(settings, GetType().Namespace + ":root:--nav-dropdown-color", _navDropdownColor);
-            settings = SettingService.SetSetting(settings, GetType().Namespace + ":root:--nav-dropdown-hover-color", _navDropdownHoverColor);
-            settings = SettingService.SetSetting(settings, GetType().Namespace + ":.light-background:--background-color", _lightBackgroundBackgroundColor);
-            settings = SettingService.SetSetting(settings, GetType().Namespace + ":.light-background:--surface-color", _lightBackgroundSurfaceColor);
-            settings = SettingService.SetSetting(settings, GetType().Namespace + ":.dark-background:--background-color", _darkBackgroundBackgroundColor);
-            settings = SettingService.SetSetting(settings, GetType().Namespace + ":.dark-background:--surface-color", _darkBackgroundSurfaceColor);
-            settings = SettingService.SetSetting(settings, GetType().Namespace + ":.dark-background:--default-color", _darkBackgroundDefaultColor);
-            settings = SettingService.SetSetting(settings, GetType().Namespace + ":.dark-background:--heading-color", _darkBackgroundHeadingColor);
-            settings = SettingService.SetSetting(settings, GetType().Namespace + ":.dark-background:--contrast-color", _darkBackgroundContrastColor);
+            settings = SetSetting(settings, GetType().Namespace + ":root:--background-color", _backgroundColor, backgroundColor);
+            settings = SetSetting(settings, GetType().Namespace + ":root:--default-color", _defaultColor, defaultColor);
+            settings = SetSetting(settings, GetType().Namespace + ":root:--heading-color", _headingColor, headingColor);
+            settings = SetSetting(settings, GetType().Namespace + ":root:--accent-color", _accentColor, accentColor);
+            settings = SetSetting(settings, GetType().Namespace + ":root:--surface-color", _surfaceColor, surfaceColor);
+            settings = SetSetting(settings, GetType().Namespace + ":root:--contrast-color", _contrastColor, contrastColor);
+            settings = SetSetting(settings, GetType().Namespace + ":.header:--background-color", _headerBackgroundColor, headerBackgroundColor);
+            settings = SetSetting(settings, GetType().Namespace + ":.header:--heading-color", _headerHeadingColor, headerHeadingColor);
+            settings = SetSetting(settings, GetType().Namespace + ":root:--nav-color", _navColor, navColor);
+            settings = SetSetting(settings, GetType().Namespace + ":root:--nav-hover-color", _navHoverColor, navHoverColor);
+            settings = SetSetting(settings, GetType().Namespace + ":root:--nav-mobile-background-color", _navMobileBackgroundColor, navMobileBackgroundColor);
+            settings = SetSetting(settings, GetType().Namespace + ":root:--nav-dropdown-background-color", _navDropdownBackgroundColor, navDropdownBackgroundColor);
+            settings = SetSetting(settings, GetType().Namespace + ":root:--nav-dropdown-color", _navDropdownColor, navDropdownColor);
+            settings = SetSetting(settings, GetType().Namespace + ":root:--nav-dropdown-hover-color", _navDropdownHoverColor, navDropdownHoverColor);
+            settings = SetSetting(settings, GetType().Namespace + ":.light-background:--background-color", _lightBackgroundBackgroundColor, lightBackgroundBackgroundColor);
+            settings = SetSetting(settings, GetType().Namespace + ":.light-background:--surface-color", _lightBackgroundSurfaceColor, lightBackgroundSurfaceColor);
+            settings = SetSetting(settings, GetType().Namespace + ":.dark-background:--background-color", _darkBackgroundBackgroundColor, darkBackgroundBackgroundColor);
+            settings = SetSetting(settings, GetType().Namespace + ":.dark-background:--surface-color", _darkBackgroundSurfaceColor, darkBackgroundSurfaceColor);
+            settings = SetSetting(settings, GetType().Namespace + ":.dark-background:--default-color", _darkBackgroundDefaultColor, darkBackgroundDefaultColor);
+            settings = SetSetting(settings, GetType().Namespace + ":.dark-background:--heading-color", _darkBackgroundHeadingColor, darkBackgroundHeadingColor);
+            settings = SetSetting(settings, GetType().Namespace + ":.dark-background:--contrast-color", _darkBackgroundContrastColor, darkBackgroundContrastColor);
 
             await SettingService.UpdateSiteSettingsAsync(settings, PageState.Site.SiteId);
 
@@ -485,5 +747,129 @@
             await logger.LogError(ex, "Error Saving Settings {Error}", ex.Message);
             AddModuleMessage("Error Saving Settings", MessageType.Error);
         }
+    }
+
+    private string GetExportUrl()
+    {
+        var colors = new CorporateThemeColors
+        {
+            Version = 1,
+            BackgroundColor = _backgroundColor,
+            DefaultColor = _defaultColor,
+            HeadingColor = _headingColor,
+            AccentColor = _accentColor,
+            SurfaceColor = _surfaceColor,
+            ContrastColor = _contrastColor,
+            HeaderBackgroundColor = _headerBackgroundColor,
+            HeaderHeadingColor = _headerHeadingColor,
+            NavColor = _navColor,
+            NavHoverColor = _navHoverColor,
+            NavMobileBackgroundColor = _navMobileBackgroundColor,
+            NavDropdownBackgroundColor = _navDropdownBackgroundColor,
+            NavDropdownColor = _navDropdownColor,
+            NavDropdownHoverColor = _navDropdownHoverColor,
+            LightBackgroundBackgroundColor = _lightBackgroundBackgroundColor,
+            LightBackgroundSurfaceColor = _lightBackgroundSurfaceColor,
+            DarkBackgroundBackgroundColor = _darkBackgroundBackgroundColor,
+            DarkBackgroundSurfaceColor = _darkBackgroundSurfaceColor,
+            DarkBackgroundDefaultColor = _darkBackgroundDefaultColor,
+            DarkBackgroundHeadingColor = _darkBackgroundHeadingColor,
+            DarkBackgroundContrastColor = _darkBackgroundContrastColor
+        };
+
+        var json = JsonSerializer.Serialize(colors, new JsonSerializerOptions
+        {
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+            WriteIndented = true
+        });
+
+        return "data:application/json;charset=utf-8," + Uri.EscapeDataString(json);
+    }
+
+    private async Task ImportColorsAsync(InputFileChangeEventArgs eventArgs)
+    {
+        try
+        {
+            var file = eventArgs.File;
+            using var stream = file.OpenReadStream(64 * 1024);
+            using var reader = new StreamReader(stream);
+            var json = await reader.ReadToEndAsync();
+            var themeColors = JsonSerializer.Deserialize<CorporateThemeColors>(json, new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            });
+
+            if (themeColors != null && themeColors.Version == 1)
+            {
+                _backgroundColor = themeColors.BackgroundColor;
+                _defaultColor = themeColors.DefaultColor;
+                _headingColor = themeColors.HeadingColor;
+                _accentColor = themeColors.AccentColor;
+                _surfaceColor = themeColors.SurfaceColor;
+                _contrastColor = themeColors.ContrastColor;
+                _headerBackgroundColor = themeColors.HeaderBackgroundColor;
+                _headerHeadingColor = themeColors.HeaderHeadingColor;
+                _navColor = themeColors.NavColor;
+                _navHoverColor = themeColors.NavHoverColor;
+                _navMobileBackgroundColor = themeColors.NavMobileBackgroundColor;
+                _navDropdownBackgroundColor = themeColors.NavDropdownBackgroundColor;
+                _navDropdownColor = themeColors.NavDropdownColor;
+                _navDropdownHoverColor = themeColors.NavDropdownHoverColor;
+                _lightBackgroundBackgroundColor = themeColors.LightBackgroundBackgroundColor;
+                _lightBackgroundSurfaceColor = themeColors.LightBackgroundSurfaceColor;
+                _darkBackgroundBackgroundColor = themeColors.DarkBackgroundBackgroundColor;
+                _darkBackgroundSurfaceColor = themeColors.DarkBackgroundSurfaceColor;
+                _darkBackgroundDefaultColor = themeColors.DarkBackgroundDefaultColor;
+                _darkBackgroundHeadingColor = themeColors.DarkBackgroundHeadingColor;
+                _darkBackgroundContrastColor = themeColors.DarkBackgroundContrastColor;
+
+                AddModuleMessage("Theme Colors Imported Successfully. You Will Need To Select The Save Button To Apply The Changes.", MessageType.Success);
+            }
+            else
+            {
+                AddModuleMessage("Error Importing Theme Colors", MessageType.Error);
+            }
+        }
+        catch (Exception ex)
+        {
+            await logger.LogError(ex, "Error Importing Theme Colors {Error}", ex.Message);
+            AddModuleMessage("Error Importing Theme Colors", MessageType.Error);
+        }
+    }
+
+    private string GetSetting(Dictionary<string, string> settings, string settingName, string defaultValue)
+    {
+        var value = SettingService.GetSetting(settings, settingName, "");
+        return (string.IsNullOrEmpty(value) ? defaultValue : value);
+    }
+    private Dictionary<string, string> SetSetting(Dictionary<string, string> settings, string settingName, string settingValue, string defaultValue)
+    {
+        return SettingService.SetSetting(settings, settingName, (settingValue == defaultValue) ? "" : settingValue);
+    }
+
+    private sealed class CorporateThemeColors
+    {
+        public int Version { get; set; }
+        public string BackgroundColor { get; set; }
+        public string DefaultColor { get; set; }
+        public string HeadingColor { get; set; }
+        public string AccentColor { get; set; }
+        public string SurfaceColor { get; set; }
+        public string ContrastColor { get; set; }
+        public string HeaderBackgroundColor { get; set; }
+        public string HeaderHeadingColor { get; set; }
+        public string NavColor { get; set; }
+        public string NavHoverColor { get; set; }
+        public string NavMobileBackgroundColor { get; set; }
+        public string NavDropdownBackgroundColor { get; set; }
+        public string NavDropdownColor { get; set; }
+        public string NavDropdownHoverColor { get; set; }
+        public string LightBackgroundBackgroundColor { get; set; }
+        public string LightBackgroundSurfaceColor { get; set; }
+        public string DarkBackgroundBackgroundColor { get; set; }
+        public string DarkBackgroundSurfaceColor { get; set; }
+        public string DarkBackgroundDefaultColor { get; set; }
+        public string DarkBackgroundHeadingColor { get; set; }
+        public string DarkBackgroundContrastColor { get; set; }
     }
 }
