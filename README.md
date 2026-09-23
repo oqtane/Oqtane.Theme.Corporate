@@ -1,6 +1,6 @@
 # Latest Release
 
-[6.1.1](https://github.com/oqtane/oqtane.theme.corporate/releases/tag/v6.1.1) was released on Mar 14, 2025.
+[10.2.6](https://github.com/oqtane/oqtane.theme.corporate/releases/tag/v10.2.6) was released on Sep 23, 2026.
 
 # Oqtane.Theme.Corporate
 
