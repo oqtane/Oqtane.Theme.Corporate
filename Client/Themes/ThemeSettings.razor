@@ -1,7 +1,6 @@
 @namespace Oqtane.Theme.Corporate
 @using Oqtane.Theme.Corporate.Services
 @using Microsoft.AspNetCore.Components.Forms
-@using System.IO
 @using System.Text.Json
 @inherits ModuleBase
 @implements Oqtane.Interfaces.ISettingsControl
@@ -455,7 +454,7 @@
         </div>
     </div>
 </Section>
-<Section Name="ImportExport" Heading="Import/Export" ResourceKey="ImportExport" Expanded="False">
+<Section Name="ImportExport" Heading="Import/Export Colors" ResourceKey="ImportExport" Expanded="False">
     <div class="container">
         <div class="row mb-1 align-items-center">
             <Label Class="col-sm-3" For="export" HelpText="Export current theme colors">Export Colors:</Label>
@@ -792,9 +791,7 @@
         {
             var file = eventArgs.File;
             using var stream = file.OpenReadStream(64 * 1024);
-            using var reader = new StreamReader(stream);
-            var json = await reader.ReadToEndAsync();
-            var themeColors = JsonSerializer.Deserialize<CorporateThemeColors>(json, new JsonSerializerOptions
+            var themeColors = await JsonSerializer.DeserializeAsync<CorporateThemeColors>(stream, new JsonSerializerOptions
             {
                 PropertyNameCaseInsensitive = true
             });
@@ -835,6 +832,7 @@
             await logger.LogError(ex, "Error Importing Theme Colors {Error}", ex.Message);
             AddModuleMessage("Error Importing Theme Colors", MessageType.Error);
         }
+        await ScrollToPageTop();
     }
 
     private string GetSetting(Dictionary<string, string> settings, string settingName, string defaultValue)
